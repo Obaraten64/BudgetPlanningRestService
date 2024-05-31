@@ -14,6 +14,5 @@ public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long account_id;
     private Integer balance;
 }

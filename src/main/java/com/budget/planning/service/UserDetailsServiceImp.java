@@ -44,14 +44,14 @@ public class UserDetailsServiceImp implements UserDetailsService {
                 .password(passwordEncoder.encode(userRegistrationRequest.getPassword()))
                 .role(role)
                 .usage_limit(role.equals(Role.CHILD) ? 100 : Integer.MAX_VALUE)
-                .bankAccount(bankAccountRepository.findBankAccountByAccountId(userRegistrationRequest.getAccount_id())
+                .bankAccount(bankAccountRepository.findById(userRegistrationRequest.getAccount_id())
                         .orElse(null))
                 .build();
         userRepository.save(user);
 
         if (user.getBankAccount() == null) {
             return new ResponseEntity<>("Successfully registered, your email is your username." +
-                    "But bank account not found, ask admin for help", HttpStatus.OK);
+                    "But bank account not found, ask admin for help or create a new one", HttpStatus.OK);
         }
         return new ResponseEntity<>("Successfully registered, your email is your username", HttpStatus.OK);
     }
