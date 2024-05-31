@@ -23,5 +23,5 @@ public class User
     @ManyToOne
     @JoinColumn(name = "account_id")
     private BankAccount bankAccount;
-    private Integer limit;
+    private Integer usage_limit;
 }
