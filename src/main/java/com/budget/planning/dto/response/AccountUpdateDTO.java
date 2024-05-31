@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 @Getter
-public class AccountRegistrationDTO {
+public class AccountUpdateDTO {
     private Long account_id;
     private Integer balance;
 }

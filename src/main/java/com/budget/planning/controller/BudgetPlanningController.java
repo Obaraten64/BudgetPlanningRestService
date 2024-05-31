@@ -2,8 +2,9 @@ package com.budget.planning.controller;
 
 import com.budget.planning.configuration.security.UserAdapter;
 import com.budget.planning.dto.request.AccountRegistrationRequest;
+import com.budget.planning.dto.request.AccountUpdateRequest;
 import com.budget.planning.dto.request.UserRegistrationRequest;
-import com.budget.planning.dto.response.AccountRegistrationDTO;
+import com.budget.planning.dto.response.AccountUpdateDTO;
 import com.budget.planning.service.BudgetPlanningService;
 import com.budget.planning.service.UserDetailsServiceImp;
 
@@ -41,14 +42,45 @@ public class BudgetPlanningController {
             security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponse(responseCode = "200", description = "Created bank account",
             content = @Content(
-                schema = @Schema(implementation = AccountRegistrationDTO.class),
+                schema = @Schema(implementation = AccountUpdateDTO.class),
                 examples = @ExampleObject(value = "{\"account_id\":2,\"balance\":10000}")))
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
 
     @PostMapping("/account/register")
-    public AccountRegistrationDTO register(@Valid @RequestBody AccountRegistrationRequest accountRequest,
-                                           @AuthenticationPrincipal UserAdapter user) {
+    public AccountUpdateDTO register(@Valid @RequestBody AccountRegistrationRequest accountRequest,
+                                     @AuthenticationPrincipal UserAdapter user) {
         return budgetPlanningService.registerAccount(accountRequest, user.getUser());
+    }
+
+    @Operation(summary = "Replenish a bank account, authorization required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "Updated bank account",
+            content = @Content(
+                    schema = @Schema(implementation = AccountUpdateDTO.class),
+                    examples = @ExampleObject(value = "{\"account_id\":2,\"balance\":10000}")))
+    @ApiResponse(responseCode = "400", description = "You do not have a bank account", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+
+    @PostMapping("/account/replenish")
+    public AccountUpdateDTO replenishAccount(@Valid @RequestBody AccountUpdateRequest accountRequest,
+                                             @AuthenticationPrincipal UserAdapter user) {
+        return budgetPlanningService.replenishAccount(accountRequest, user.getUser());
+    }
+
+    @Operation(summary = "Withdraw money from bank account, authorization required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "Updated bank account",
+            content = @Content(
+                    schema = @Schema(implementation = AccountUpdateDTO.class),
+                    examples = @ExampleObject(value = "{\"account_id\":2,\"balance\":10000}")))
+    @ApiResponse(responseCode = "400", description = "You do not have a bank account or " +
+            "balance will become zero after operation", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+
+    @PostMapping("/account/withdraw")
+    public AccountUpdateDTO withdrawAccount(@Valid @RequestBody AccountUpdateRequest accountRequest,
+                                            @AuthenticationPrincipal UserAdapter user) {
+        return budgetPlanningService. withdrawAccount(accountRequest, user.getUser());
     }
 
     // http://localhost:8080/swagger-ui/index.html to access swagger

@@ -24,6 +24,7 @@ public class BankHistory {
     private LocalDateTime timestamp;
     private String operation;
     private String purpose;
+    private Integer amount;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
