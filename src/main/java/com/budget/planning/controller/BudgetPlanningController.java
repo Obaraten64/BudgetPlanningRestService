@@ -12,8 +12,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import jakarta.validation.Valid;
 
 import lombok.AllArgsConstructor;

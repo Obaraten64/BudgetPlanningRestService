@@ -2,13 +2,11 @@ package com.budget.planning.dto.request;
 
 import jakarta.validation.constraints.Min;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Getter
 public class AccountRegistrationRequest {
