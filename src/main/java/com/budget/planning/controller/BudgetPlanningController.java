@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 import lombok.AllArgsConstructor;
@@ -36,7 +37,8 @@ public class BudgetPlanningController {
         return userDetailsService.register(userRegistrationRequest);
     }
 
-    @Operation(summary = "Register new bank account")
+    @Operation(summary = "Register new bank account, authorization required",
+            security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponse(responseCode = "200", description = "Created bank account",
             content = @Content(
                 schema = @Schema(implementation = AccountRegistrationDTO.class),
