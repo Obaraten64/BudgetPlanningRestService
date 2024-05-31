@@ -1,6 +1,7 @@
 package com.budget.planning.controller.advice;
 
 import com.budget.planning.exception.AccountUpdateException;
+import com.budget.planning.exception.LimitUpdateException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,7 +24,13 @@ public class BudgetPlanningAdvice {
 
     @ExceptionHandler(AccountUpdateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleCreateOrderException(AccountUpdateException exception) {
+    public Map<String, String> handleAccountUpdateException(AccountUpdateException exception) {
+        return Map.of("error", exception.getMessage());
+    }
+
+    @ExceptionHandler(LimitUpdateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleLimitUpdateException(LimitUpdateException exception) {
         return Map.of("error", exception.getMessage());
     }
 }

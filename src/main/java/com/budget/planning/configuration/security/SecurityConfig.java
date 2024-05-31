@@ -23,7 +23,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/account/register").hasAnyAuthority(allRoles)
+                        .requestMatchers(HttpMethod.POST, "/account/**").hasAnyAuthority(allRoles)
+                        .requestMatchers(HttpMethod.POST, "/limit/update")
+                                .hasAuthority(Role.PARENT.toString())
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().denyAll()

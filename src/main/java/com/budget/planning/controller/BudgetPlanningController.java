@@ -3,8 +3,10 @@ package com.budget.planning.controller;
 import com.budget.planning.configuration.security.UserAdapter;
 import com.budget.planning.dto.request.AccountRegistrationRequest;
 import com.budget.planning.dto.request.AccountUpdateRequest;
+import com.budget.planning.dto.request.LimitUpdateRequest;
 import com.budget.planning.dto.request.UserRegistrationRequest;
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.UserWithLimitDTO;
 import com.budget.planning.service.BudgetPlanningService;
 import com.budget.planning.service.UserDetailsServiceImp;
 
@@ -80,7 +82,24 @@ public class BudgetPlanningController {
     @PostMapping("/account/withdraw")
     public AccountUpdateDTO withdrawAccount(@Valid @RequestBody AccountUpdateRequest accountRequest,
                                             @AuthenticationPrincipal UserAdapter user) {
-        return budgetPlanningService. withdrawAccount(accountRequest, user.getUser());
+        return budgetPlanningService.withdrawAccount(accountRequest, user.getUser());
+    }
+
+    @Operation(summary = "Set new usage limit for a child, Parent role required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "Updated user",
+            content = @Content(
+                    schema = @Schema(implementation = UserWithLimitDTO.class),
+                    examples = @ExampleObject(value = "{\"name\":\"vova\",\"email\":\"vova@gmail.com\",\"usage_limit\":10}")))
+    @ApiResponse(responseCode = "400", description = "You do not have a bank account, you can't withdraw that much money or" +
+            "balance will become zero after operation", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
+
+    @PostMapping("/limit/update")
+    public UserWithLimitDTO updateLimit(@Valid @RequestBody LimitUpdateRequest limitRequest,
+                                        @AuthenticationPrincipal UserAdapter user) {
+        return budgetPlanningService.updateLimit(limitRequest, user.getUser());
     }
 
     // http://localhost:8080/swagger-ui/index.html to access swagger

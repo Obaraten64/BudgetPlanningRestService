@@ -1,10 +1,14 @@
 package com.budget.planning.service;
 
 import com.budget.planning.configuration.Mapper;
+import com.budget.planning.configuration.security.Role;
 import com.budget.planning.dto.request.AccountRegistrationRequest;
 import com.budget.planning.dto.request.AccountUpdateRequest;
+import com.budget.planning.dto.request.LimitUpdateRequest;
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.UserWithLimitDTO;
 import com.budget.planning.exception.AccountUpdateException;
+import com.budget.planning.exception.LimitUpdateException;
 import com.budget.planning.model.BankAccount;
 import com.budget.planning.model.BankHistory;
 import com.budget.planning.model.User;
@@ -85,5 +89,19 @@ public class BudgetPlanningService {
         bankHistoryRepository.save(bankHistory);
 
         return Mapper.mapToAccountRegistration(bankAccount);
+    }
+
+    @Transactional
+    public UserWithLimitDTO updateLimit(LimitUpdateRequest limitRequest, User user) {
+        User child = userRepository.findUserByEmail(limitRequest.getUsername())
+                .orElseThrow(() -> new LimitUpdateException("No user with such username"));
+        if (!child.getBankAccount().equals(user.getBankAccount()) || !Role.CHILD.equals(child.getRole())) {
+            throw new LimitUpdateException("You can't change limit of this user");
+        }
+
+        child.setUsage_limit(limitRequest.getUsage_limit());
+        userRepository.save(child);
+
+        return Mapper.mapToUserWithLimitDTO(child);
     }
 }
