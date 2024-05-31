@@ -24,7 +24,7 @@ public class BudgetPlanningController {
     @ApiResponse(responseCode = "200", description = "User registered", content = @Content)
     @ApiResponse(responseCode = "400", description = "Wrong role or user already registered", content = @Content)
 
-    @PostMapping("/register")
+    @PostMapping("/user/register")
     public ResponseEntity<String> register(@Valid @RequestBody UserRegistrationRequest userRegistrationRequest) {
         return userDetailsService.register(userRegistrationRequest);
     }
