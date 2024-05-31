@@ -60,12 +60,17 @@ public class BudgetPlanningService {
 
     @Transactional
     public AccountUpdateDTO withdrawAccount(AccountUpdateRequest accountRequest, User user) {
+        if (accountRequest.getAmount() > user.getUsage_limit()) {
+            throw new AccountUpdateException("Your usage limit does not allow you to perform this operation");
+        }
         BankAccount bankAccount = Optional.ofNullable(user.getBankAccount())
                 .orElseThrow(() -> new AccountUpdateException("You do not have a bank account!"));
+
         int newBalance = bankAccount.getBalance() - accountRequest.getAmount();
         if (newBalance < 0) {
             throw new AccountUpdateException("Balance can not become less than zero after operation");
         }
+
         bankAccount.setBalance(newBalance);
         bankAccountRepository.save(bankAccount);
 

@@ -73,7 +73,7 @@ public class BudgetPlanningController {
             content = @Content(
                     schema = @Schema(implementation = AccountUpdateDTO.class),
                     examples = @ExampleObject(value = "{\"account_id\":2,\"balance\":10000}")))
-    @ApiResponse(responseCode = "400", description = "You do not have a bank account or " +
+    @ApiResponse(responseCode = "400", description = "You do not have a bank account, you can't withdraw that much money or" +
             "balance will become zero after operation", content = @Content)
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
 
