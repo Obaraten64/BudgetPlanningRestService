@@ -161,7 +161,7 @@ public class BudgetPlanningController {
     public ResponseEntity<String> deleteAccount(@Parameter(description = "Book ID for return")
                                                   @RequestParam Long id) {
         if (budgetPlanningService.deleteAccount(id)) {
-            return new ResponseEntity<>("Account deleted", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Account deleted", HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Wrong id", HttpStatus.BAD_REQUEST);
