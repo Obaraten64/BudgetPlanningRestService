@@ -13,6 +13,12 @@ import java.util.List;
 public interface BankHistoryRepository extends JpaRepository<BankHistory,Long> {
     default List<BankHistory> findAllHistoriesByBankAccount(BankAccount bankAccount) {
         return findAll().stream()
+                .filter(b -> b.getBankAccount().equals(bankAccount))
+                .toList();
+    }
+
+    default List<BankHistory> findAllHistoriesByBankAccountForLastMonth(BankAccount bankAccount) {
+        return findAll().stream()
                 .filter(b -> b.getBankAccount().equals(bankAccount)
                         && b.getTimestamp().isAfter(LocalDateTime.now().minusMonths(1L)))
                 .toList();

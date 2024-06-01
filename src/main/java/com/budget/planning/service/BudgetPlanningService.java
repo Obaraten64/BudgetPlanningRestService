@@ -111,7 +111,7 @@ public class BudgetPlanningService {
         BankAccount bankAccount = Optional.ofNullable(user.getBankAccount())
                 .orElseThrow(() -> new BankHistoryException("You do not have a bank account!"));
 
-        List<BankHistory> bankHistories = bankHistoryRepository.findAllHistoriesByBankAccount(bankAccount);
+        List<BankHistory> bankHistories = bankHistoryRepository.findAllHistoriesByBankAccountForLastMonth(bankAccount);
         if (bankHistories.isEmpty()) {
             throw new BankHistoryException("No transactions have been performed for this account");
         }
@@ -121,6 +121,7 @@ public class BudgetPlanningService {
                 .toList();
     }
 
+    @Transactional
     public UserDTO updateBankAccount(UpdateUserRequest userRequest) {
         User user = userRepository.findUserByEmail(userRequest.getEmail())
                 .orElseThrow(() -> new AccountUpdateException("There are no users with that username"));
@@ -137,5 +138,20 @@ public class BudgetPlanningService {
         return bankAccountRepository.findAll().stream()
                 .map(Mapper::mapToBankAccountDTO)
                 .toList();
+    }
+
+    @Transactional
+    public boolean deleteAccount(Long id) {
+        BankAccount bankAccount = bankAccountRepository.findById(id).orElse(null);
+        if (bankAccount == null) {
+            return false;
+        }
+
+        bankHistoryRepository.deleteAll(bankHistoryRepository.findAllHistoriesByBankAccount(bankAccount));
+        userRepository.findAllUsersByBankAccount(bankAccount)
+                .forEach(u -> {u.setBankAccount(null); userRepository.save(u);});
+        bankAccountRepository.delete(bankAccount);
+
+        return true;
     }
 }

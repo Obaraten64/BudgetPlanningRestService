@@ -3,11 +3,11 @@ package com.budget.planning.controller;
 import com.budget.planning.configuration.security.UserAdapter;
 import com.budget.planning.dto.request.*;
 import com.budget.planning.dto.response.*;
-import com.budget.planning.model.BankAccount;
 import com.budget.planning.service.BudgetPlanningService;
 import com.budget.planning.service.UserDetailsServiceImp;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,6 +18,7 @@ import jakarta.validation.Valid;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -147,6 +148,23 @@ public class BudgetPlanningController {
     @GetMapping("/account/all")
     public List<BankAccountDTO> getAllAccounts() {
         return budgetPlanningService.getAllAccounts();
+    }
+
+    @Operation(summary = "Delete bank account and all its history, Admin role required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "The account was deleted", content = @Content)
+    @ApiResponse(responseCode = "400", description = "Wrong id", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
+
+    @DeleteMapping("/account/delete") //link looks like/account/delete?id=1
+    public ResponseEntity<String> deleteAccount(@Parameter(description = "Book ID for return")
+                                                  @RequestParam Long id) {
+        if (budgetPlanningService.deleteAccount(id)) {
+            return new ResponseEntity<>("Account deleted", HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>("Wrong id", HttpStatus.BAD_REQUEST);
     }
 
     // http://localhost:8080/swagger-ui/index.html to access swagger
