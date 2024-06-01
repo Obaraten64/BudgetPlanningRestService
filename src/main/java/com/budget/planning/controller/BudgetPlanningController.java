@@ -6,8 +6,10 @@ import com.budget.planning.dto.request.AccountUpdateRequest;
 import com.budget.planning.dto.request.LimitUpdateRequest;
 import com.budget.planning.dto.request.UserRegistrationRequest;
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.BankAccountDTO;
 import com.budget.planning.dto.response.BankHistoryDTO;
 import com.budget.planning.dto.response.UserWithLimitDTO;
+import com.budget.planning.model.BankAccount;
 import com.budget.planning.service.BudgetPlanningService;
 import com.budget.planning.service.UserDetailsServiceImp;
 
@@ -121,6 +123,22 @@ public class BudgetPlanningController {
     @GetMapping("/account/history")
     public List<BankHistoryDTO> getAccountHistory(@AuthenticationPrincipal UserAdapter user) {
         return budgetPlanningService.getAccountHistory(user.getUser());
+    }
+
+    @Operation(summary = "Get all bank accounts, Admin role required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "List of all accounts",
+            content = @Content(
+                    schema = @Schema(implementation = BankHistoryDTO.class),
+                    examples = @ExampleObject(value = "[{\"operation\":\"replenish\",\"reason\":\"payday\"," +
+                            "\"timestamp\":\"2024-05-19T09:01:06\",\"amount\":1100,\"user\":" +
+                            "{\"name\":\"vova\",\"email\":\"vova@gmail.com\",\"usage_limit\":100}}]")))
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
+
+    @GetMapping("/account/all")
+    public List<BankAccountDTO> getAllAccounts() {
+        return budgetPlanningService.getAllAccounts();
     }
 
     // http://localhost:8080/swagger-ui/index.html to access swagger

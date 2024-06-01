@@ -6,6 +6,7 @@ import com.budget.planning.dto.request.AccountRegistrationRequest;
 import com.budget.planning.dto.request.AccountUpdateRequest;
 import com.budget.planning.dto.request.LimitUpdateRequest;
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.BankAccountDTO;
 import com.budget.planning.dto.response.BankHistoryDTO;
 import com.budget.planning.dto.response.UserWithLimitDTO;
 import com.budget.planning.exception.AccountUpdateException;
@@ -119,6 +120,12 @@ public class BudgetPlanningService {
 
         return bankHistories.stream()
                 .map(Mapper::mapToBankHistoryDTO)
+                .toList();
+    }
+
+    public List<BankAccountDTO> getAllAccounts() {
+        return bankAccountRepository.findAll().stream()
+                .map(Mapper::mapToBankAccountDTO)
                 .toList();
     }
 }

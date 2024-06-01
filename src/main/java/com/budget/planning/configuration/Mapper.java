@@ -1,6 +1,7 @@
 package com.budget.planning.configuration;
 
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.BankAccountDTO;
 import com.budget.planning.dto.response.BankHistoryDTO;
 import com.budget.planning.dto.response.UserWithLimitDTO;
 import com.budget.planning.model.BankAccount;
@@ -30,6 +31,13 @@ public class Mapper {
                 .timestamp(bankHistory.getTimestamp())
                 .amount(bankHistory.getAmount())
                 .user(Mapper.mapToUserWithLimitDTO(bankHistory.getUser()))
+                .build();
+    }
+
+    public static BankAccountDTO mapToBankAccountDTO(BankAccount bankAccount) {
+        return BankAccountDTO.builder()
+                .id(bankAccount.getId())
+                .balance(bankAccount.getBalance())
                 .build();
     }
 }
