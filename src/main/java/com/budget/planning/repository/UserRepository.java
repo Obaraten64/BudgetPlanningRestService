@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     default List<User> findAllUsersByBankAccount(BankAccount bankAccount) {
         return findAll().stream()
-                .filter(u -> u.getBankAccount().equals(bankAccount))
+                .filter(u -> bankAccount.equals(u.getBankAccount()))
                 .toList();
     }
 }
