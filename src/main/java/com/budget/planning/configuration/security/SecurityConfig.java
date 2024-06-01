@@ -26,7 +26,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/account/history")
                                 .hasAnyAuthority(Role.PARENT.toString(), Role.ADMIN.toString())
                         .requestMatchers(HttpMethod.POST, "/account/**").hasAnyAuthority(allRoles)
-                        .requestMatchers(HttpMethod.POST, "/limit/update")
+                        .requestMatchers(HttpMethod.POST, "/user/limit")
                                 .hasAnyAuthority(Role.PARENT.toString(), Role.ADMIN.toString())
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()

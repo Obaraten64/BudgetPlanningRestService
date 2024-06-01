@@ -99,7 +99,7 @@ public class BudgetPlanningController {
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
 
-    @PostMapping("/limit/update")
+    @PostMapping("/user/limit")
     public UserWithLimitDTO updateLimit(@Valid @RequestBody LimitUpdateRequest limitRequest,
                                         @AuthenticationPrincipal UserAdapter user) {
         return budgetPlanningService.updateLimit(limitRequest, user.getUser());
