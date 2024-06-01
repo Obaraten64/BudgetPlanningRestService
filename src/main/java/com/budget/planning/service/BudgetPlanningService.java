@@ -35,8 +35,8 @@ public class BudgetPlanningService {
 
     @Transactional
     public AccountUpdateDTO registerAccount(AccountRegistrationRequest accountRequest, User user) {
-        BankAccount bankAccount = BankAccount.builder().balance(accountRequest.getBalance()).build();
-        bankAccountRepository.save(bankAccount);
+        BankAccount bankAccount = bankAccountRepository.save
+                (BankAccount.builder().balance(accountRequest.getBalance()).build());
 
         user.setBankAccount(bankAccount);
         userRepository.save(user);
@@ -93,11 +93,14 @@ public class BudgetPlanningService {
         return Mapper.mapToAccountRegistration(bankAccount);
     }
 
+    private final BankAccount emptyAccount = new BankAccount();
+
     @Transactional
     public UserWithLimitDTO updateLimit(LimitUpdateRequest limitRequest, User user) {
         User child = userRepository.findUserByEmail(limitRequest.getUsername())
                 .orElseThrow(() -> new LimitUpdateException("No user with such username"));
-        if (!child.getBankAccount().equals(user.getBankAccount()) || !Role.CHILD.equals(child.getRole())) {
+        if (!Optional.ofNullable(child.getBankAccount()).orElse(emptyAccount)
+                .equals(user.getBankAccount()) || !Role.CHILD.equals(child.getRole())) {
             throw new LimitUpdateException("You can't change limit of this user");
         }
 
