@@ -23,7 +23,7 @@ public class BankHistory {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timestamp;
     private String operation;
-    private String purpose;
+    private String reason;
     private Integer amount;
     @ManyToOne
     @JoinColumn(name = "user_id")

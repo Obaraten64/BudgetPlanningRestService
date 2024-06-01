@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 @Getter
 public class AccountRegistrationRequest {
-    @Min(value = 1, message = "Write down initial balance of the account!")
+    @Min(value = 0, message = "Write down initial balance of the account!")
     private Integer balance;
 }

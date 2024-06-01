@@ -23,6 +23,7 @@ public class UserRegistrationRequest {
     @Schema(example = "parent")
     @NotBlank(message = "Write down your role!")
     private String role;
-    @Min(value = 1, message = "Write down your bank account id!")
+    @Schema(description = "Write down '0' if do not have an account")
+    @Min(value = 0, message = "Write down your bank account id!")
     private Long account_id;
 }

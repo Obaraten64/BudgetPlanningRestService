@@ -11,9 +11,9 @@ import lombok.*;
 @Builder
 @Getter
 public class AccountUpdateRequest {
-    @Min(value = 1, message = "Write down how much money you want to spend!")
+    @Min(value = 1, message = "Write down with how much money you want to update your account!")
     private Integer amount;
     @Schema(example = "Buy candy")
     @NotBlank(message = "Write down purpose of the operation!")
-    private String purpose;
+    private String reason;
 }

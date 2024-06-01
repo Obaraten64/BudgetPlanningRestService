@@ -85,14 +85,14 @@ public class BudgetPlanningController {
         return budgetPlanningService.withdrawAccount(accountRequest, user.getUser());
     }
 
-    @Operation(summary = "Set new usage limit for a child, Parent role required",
+    @Operation(summary = "Set new usage limit for a child, Parent or Admin role required",
             security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponse(responseCode = "200", description = "Updated user",
             content = @Content(
                     schema = @Schema(implementation = UserWithLimitDTO.class),
                     examples = @ExampleObject(value = "{\"name\":\"vova\",\"email\":\"vova@gmail.com\",\"usage_limit\":10}")))
-    @ApiResponse(responseCode = "400", description = "You do not have a bank account, you can't withdraw that much money or" +
-            "balance will become zero after operation", content = @Content)
+    @ApiResponse(responseCode = "400", description = "No user with such username, or " +
+            "you can't change limit of this user", content = @Content)
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
 

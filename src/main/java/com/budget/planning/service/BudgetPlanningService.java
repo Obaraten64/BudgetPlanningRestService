@@ -51,7 +51,7 @@ public class BudgetPlanningService {
 
         BankHistory bankHistory = BankHistory.builder()
                 .operation("replenish")
-                .purpose(accountRequest.getPurpose())
+                .reason(accountRequest.getReason())
                 .timestamp(LocalDateTime.now())
                 .amount(accountRequest.getAmount())
                 .bankAccount(bankAccount)
@@ -80,7 +80,7 @@ public class BudgetPlanningService {
 
         BankHistory bankHistory = BankHistory.builder()
                 .operation("withdraw")
-                .purpose(accountRequest.getPurpose())
+                .reason(accountRequest.getReason())
                 .timestamp(LocalDateTime.now())
                 .amount(accountRequest.getAmount())
                 .bankAccount(bankAccount)
