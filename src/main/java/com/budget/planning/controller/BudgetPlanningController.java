@@ -129,10 +129,8 @@ public class BudgetPlanningController {
             security = @SecurityRequirement(name = "basicAuth"))
     @ApiResponse(responseCode = "200", description = "List of all accounts",
             content = @Content(
-                    schema = @Schema(implementation = BankHistoryDTO.class),
-                    examples = @ExampleObject(value = "[{\"operation\":\"replenish\",\"reason\":\"payday\"," +
-                            "\"timestamp\":\"2024-05-19T09:01:06\",\"amount\":1100,\"user\":" +
-                            "{\"name\":\"vova\",\"email\":\"vova@gmail.com\",\"usage_limit\":100}}]")))
+                    schema = @Schema(implementation = BankAccountDTO.class),
+                    examples = @ExampleObject(value = "[{\"id\":1,\"balance\":1000},{\"id\":2,\"balance\":22000}]")))
     @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
     @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
 
