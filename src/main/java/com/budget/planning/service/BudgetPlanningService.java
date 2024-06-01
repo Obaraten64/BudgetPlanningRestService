@@ -5,10 +5,8 @@ import com.budget.planning.configuration.security.Role;
 import com.budget.planning.dto.request.AccountRegistrationRequest;
 import com.budget.planning.dto.request.AccountUpdateRequest;
 import com.budget.planning.dto.request.LimitUpdateRequest;
-import com.budget.planning.dto.response.AccountUpdateDTO;
-import com.budget.planning.dto.response.BankAccountDTO;
-import com.budget.planning.dto.response.BankHistoryDTO;
-import com.budget.planning.dto.response.UserWithLimitDTO;
+import com.budget.planning.dto.request.UpdateUserRequest;
+import com.budget.planning.dto.response.*;
 import com.budget.planning.exception.AccountUpdateException;
 import com.budget.planning.exception.BankHistoryException;
 import com.budget.planning.exception.LimitUpdateException;
@@ -121,6 +119,18 @@ public class BudgetPlanningService {
         return bankHistories.stream()
                 .map(Mapper::mapToBankHistoryDTO)
                 .toList();
+    }
+
+    public UserDTO updateBankAccount(UpdateUserRequest userRequest) {
+        User user = userRepository.findUserByEmail(userRequest.getEmail())
+                .orElseThrow(() -> new AccountUpdateException("There are no users with that username"));
+        BankAccount bankAccount = bankAccountRepository.findById(userRequest.getAccount_id())
+                .orElseThrow(() -> new AccountUpdateException("There are no bank account with that id"));
+
+        user.setBankAccount(bankAccount);
+        userRepository.save(user);
+
+        return Mapper.mapToUserDTO(user);
     }
 
     public List<BankAccountDTO> getAllAccounts() {

@@ -1,14 +1,8 @@
 package com.budget.planning.controller;
 
 import com.budget.planning.configuration.security.UserAdapter;
-import com.budget.planning.dto.request.AccountRegistrationRequest;
-import com.budget.planning.dto.request.AccountUpdateRequest;
-import com.budget.planning.dto.request.LimitUpdateRequest;
-import com.budget.planning.dto.request.UserRegistrationRequest;
-import com.budget.planning.dto.response.AccountUpdateDTO;
-import com.budget.planning.dto.response.BankAccountDTO;
-import com.budget.planning.dto.response.BankHistoryDTO;
-import com.budget.planning.dto.response.UserWithLimitDTO;
+import com.budget.planning.dto.request.*;
+import com.budget.planning.dto.response.*;
 import com.budget.planning.model.BankAccount;
 import com.budget.planning.service.BudgetPlanningService;
 import com.budget.planning.service.UserDetailsServiceImp;
@@ -123,6 +117,22 @@ public class BudgetPlanningController {
     @GetMapping("/account/history")
     public List<BankHistoryDTO> getAccountHistory(@AuthenticationPrincipal UserAdapter user) {
         return budgetPlanningService.getAccountHistory(user.getUser());
+    }
+
+    @Operation(summary = "Update the user's bank account, Admin role required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "Updated user",
+            content = @Content(
+                    schema = @Schema(implementation = UserDTO.class),
+                    examples = @ExampleObject(value = "{\"id\":1,\"name\":1000,\"email\":\"vova@gmail.com\"," +
+                            "\"role\":\"PARENT\",\"usage_limit\":100,\"bankAccount\":" +
+                            "{\"id\":1,\"balance\":1000}}")))
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
+
+    @PostMapping("/user/account")
+    public UserDTO updateBankAccount(@Valid @RequestBody UpdateUserRequest userRequest) {
+        return budgetPlanningService.updateBankAccount(userRequest);
     }
 
     @Operation(summary = "Get all bank accounts, Admin role required",
