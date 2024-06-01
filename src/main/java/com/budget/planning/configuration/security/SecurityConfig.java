@@ -30,6 +30,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/account/**").hasAnyAuthority(allRoles)
                         .requestMatchers(HttpMethod.POST, "/user/limit")
                                 .hasAnyAuthority(Role.PARENT.toString(), Role.ADMIN.toString())
+                        .requestMatchers(HttpMethod.POST, "/user/account")
+                                .hasAnyAuthority(Role.ADMIN.toString())
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .anyRequest().denyAll()
