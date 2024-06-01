@@ -40,9 +40,11 @@ public class Mapper {
 
     public static UserDTO mapToUserDTO(User user) {
         return UserDTO.builder()
+                .user_id(user.getUser_id())
                 .name(user.getName())
                 .email(user.getEmail())
                 .role(user.getRole().toString())
+                .usage_limit(user.getUsage_limit())
                 .bankAccount(Mapper.mapToBankAccountDTO(user.getBankAccount()))
                 .build();
     }
