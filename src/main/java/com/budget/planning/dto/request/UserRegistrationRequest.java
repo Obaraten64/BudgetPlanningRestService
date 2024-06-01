@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -23,7 +24,7 @@ public class UserRegistrationRequest {
     @Schema(example = "parent")
     @NotBlank(message = "Write down your role!")
     private String role;
-    @Schema(description = "Write down '0' if do not have an account")
-    @Min(value = 0, message = "Write down your bank account id!")
+    @NotNull(message = "Write down your bank account id!")
+    @Min(value = 0, message = "Write down correct bank account id!")
     private Long account_id;
 }
