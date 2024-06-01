@@ -1,6 +1,7 @@
 package com.budget.planning.controller.advice;
 
 import com.budget.planning.exception.AccountUpdateException;
+import com.budget.planning.exception.BankHistoryException;
 import com.budget.planning.exception.LimitUpdateException;
 
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,12 @@ public class BudgetPlanningAdvice {
     @ExceptionHandler(LimitUpdateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Map<String, String> handleLimitUpdateException(LimitUpdateException exception) {
+        return Map.of("error", exception.getMessage());
+    }
+
+    @ExceptionHandler(BankHistoryException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleBankHistoryException(BankHistoryException exception) {
         return Map.of("error", exception.getMessage());
     }
 }
