@@ -23,6 +23,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/user/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/account/history")
+                                .hasAnyAuthority(Role.PARENT.toString(), Role.ADMIN.toString())
                         .requestMatchers(HttpMethod.POST, "/account/**").hasAnyAuthority(allRoles)
                         .requestMatchers(HttpMethod.POST, "/limit/update")
                                 .hasAnyAuthority(Role.PARENT.toString(), Role.ADMIN.toString())

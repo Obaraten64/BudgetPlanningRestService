@@ -6,8 +6,10 @@ import com.budget.planning.dto.request.AccountRegistrationRequest;
 import com.budget.planning.dto.request.AccountUpdateRequest;
 import com.budget.planning.dto.request.LimitUpdateRequest;
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.BankHistoryDTO;
 import com.budget.planning.dto.response.UserWithLimitDTO;
 import com.budget.planning.exception.AccountUpdateException;
+import com.budget.planning.exception.BankHistoryException;
 import com.budget.planning.exception.LimitUpdateException;
 import com.budget.planning.model.BankAccount;
 import com.budget.planning.model.BankHistory;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -103,5 +106,19 @@ public class BudgetPlanningService {
         userRepository.save(child);
 
         return Mapper.mapToUserWithLimitDTO(child);
+    }
+
+    public List<BankHistoryDTO> getAccountHistory(User user) {
+        BankAccount bankAccount = Optional.ofNullable(user.getBankAccount())
+                .orElseThrow(() -> new BankHistoryException("You do not have a bank account!"));
+
+        List<BankHistory> bankHistories = bankHistoryRepository.findAllHistoriesByBankAccount(bankAccount);
+        if (bankHistories.isEmpty()) {
+            throw new BankHistoryException("No transactions have been performed for this account");
+        }
+
+        return bankHistories.stream()
+                .map(Mapper::mapToBankHistoryDTO)
+                .toList();
     }
 }

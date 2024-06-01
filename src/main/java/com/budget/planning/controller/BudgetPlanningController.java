@@ -6,6 +6,7 @@ import com.budget.planning.dto.request.AccountUpdateRequest;
 import com.budget.planning.dto.request.LimitUpdateRequest;
 import com.budget.planning.dto.request.UserRegistrationRequest;
 import com.budget.planning.dto.response.AccountUpdateDTO;
+import com.budget.planning.dto.response.BankHistoryDTO;
 import com.budget.planning.dto.response.UserWithLimitDTO;
 import com.budget.planning.service.BudgetPlanningService;
 import com.budget.planning.service.UserDetailsServiceImp;
@@ -24,6 +25,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -100,6 +103,24 @@ public class BudgetPlanningController {
     public UserWithLimitDTO updateLimit(@Valid @RequestBody LimitUpdateRequest limitRequest,
                                         @AuthenticationPrincipal UserAdapter user) {
         return budgetPlanningService.updateLimit(limitRequest, user.getUser());
+    }
+
+    @Operation(summary = "Get your bank account history for the last month, Parent or Admin role required",
+            security = @SecurityRequirement(name = "basicAuth"))
+    @ApiResponse(responseCode = "200", description = "List of account transactions",
+            content = @Content(
+                    schema = @Schema(implementation = BankHistoryDTO.class),
+                    examples = @ExampleObject(value = "[{\"operation\":\"replenish\",\"reason\":\"payday\"," +
+                            "\"timestamp\":\"2024-05-19T09:01:06\",\"amount\":1100,\"user\":" +
+                            "{\"name\":\"vova\",\"email\":\"vova@gmail.com\",\"usage_limit\":100}}]")))
+    @ApiResponse(responseCode = "400", description = "You do not have a bank account, or " +
+            "no transactions have been performed for this account", content = @Content)
+    @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content)
+    @ApiResponse(responseCode = "403", description = "Wrong role", content = @Content)
+
+    @GetMapping("/account/history")
+    public List<BankHistoryDTO> getAccountHistory(@AuthenticationPrincipal UserAdapter user) {
+        return budgetPlanningService.getAccountHistory(user.getUser());
     }
 
     // http://localhost:8080/swagger-ui/index.html to access swagger
