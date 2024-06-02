@@ -18,9 +18,10 @@ public interface BankHistoryRepository extends JpaRepository<BankHistory,Long> {
     }
 
     default List<BankHistory> findAllHistoriesByBankAccountForLastMonth(BankAccount bankAccount) {
+        LocalDateTime now = LocalDateTime.now().minusMonths(1L);
         return findAll().stream()
                 .filter(b -> bankAccount.equals(b.getBankAccount())
-                        && b.getTimestamp().isAfter(LocalDateTime.now().minusMonths(1L)))
+                        && b.getTimestamp().isAfter(now))
                 .toList();
     }
 }
