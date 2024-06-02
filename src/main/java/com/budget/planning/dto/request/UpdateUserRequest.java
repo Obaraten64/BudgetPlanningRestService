@@ -12,7 +12,7 @@ import lombok.Data;
 public class UpdateUserRequest {
     @Schema(example = "vova@gmail.com")
     @NotBlank(message = "Write down username!")
-    private String email;
+    private String username;
     @NotNull(message = "Write down bank account id!")
     @Min(value = 1, message = "Write down correct bank account id!")
     private Long account_id;

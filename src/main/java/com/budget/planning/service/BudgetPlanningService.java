@@ -126,7 +126,7 @@ public class BudgetPlanningService {
 
     @Transactional
     public UserDTO updateBankAccount(UpdateUserRequest userRequest) {
-        User user = userRepository.findUserByEmail(userRequest.getEmail())
+        User user = userRepository.findUserByEmail(userRequest.getUsername())
                 .orElseThrow(() -> new AccountUpdateException("There are no users with that username"));
         BankAccount bankAccount = bankAccountRepository.findById(userRequest.getAccount_id())
                 .orElseThrow(() -> new AccountUpdateException("There are no bank account with that id"));
